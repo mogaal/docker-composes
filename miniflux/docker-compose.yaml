@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  miniflux:
+    image: miniflux/miniflux:2.0.33
+    container_name: miniflux
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - overlay
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+      - CREATE_ADMIN=1
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=123456
+
+  db:
+    image: postgres:14
+    container_name: miniflux_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - overlay
+    environment:
+      - POSTGRES_USER=miniflux
+      - POSTGRES_DB=miniflux
+      - POSTGRES_PASSWORD=secret
+
+networks:
+  overlay:
+
+volumes:
+  db-data:
