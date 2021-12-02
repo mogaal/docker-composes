@@ -16,19 +16,30 @@ services:
       - postgres
     restart: unless-stopped
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4:6.0
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-       - pgadmin:/root/.pgadmin
+  # Very useful for postgres debugging, just open this URL and done:
+  # http://localhost:8080/?pgsql=postgres
+  adminer:
+    image: adminer:4.8.1
+    restart: always
     ports:
-      - "${PGADMIN_PORT:-5050}:80"
+      - 8080:8080
     networks:
       - postgres
-    restart: unless-stopped
+
+  # # If we want to use pgadmin - it has nice UI but only arm64
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4:6.0
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #   volumes:
+  #      - pgadmin:/root/.pgadmin
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
 
 networks:
   postgres:

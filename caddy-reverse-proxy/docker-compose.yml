@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  # START: Caddy - reverse-proxy/web-server
+  caddy:
+    image: caddy:2.4.5-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - default
+  # END: Caddy - reverse-proxy/web-server
+
+networks:
+  default:
+
+volumes:
+  caddy_data:
+  caddy_config:
+

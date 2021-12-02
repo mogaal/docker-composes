@@ -1,0 +1,4 @@
+rss.mogaal.com {
+  reverse_proxy 10.0.0.4:6060
+}
+
